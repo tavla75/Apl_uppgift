@@ -1,0 +1,36 @@
+# .NET build output
+**/bin/
+**/obj/
+
+# SQLite databases and journal files
+*.db
+*.db-shm
+*.db-wal
+
+# JavaScript dependencies and generated output
+**/node_modules/
+**/dist/
+**/.angular/cache/
+coverage/
+
+# Local environment and app settings
+.env
+.env.*
+!.env.example
+**/appsettings.Local.json
+**/appsettings.*.local.json
+
+# Per-user IDE state
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/shelf/
+.idea/**/httpRequests/
+.idea/**/dataSources/
+.idea/**/dataSources.local.xml
+
+# Logs and operating-system files
+*.log
+.DS_Store
+Thumbs.db
+Desktop.ini
