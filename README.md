@@ -13,7 +13,7 @@ Responsiv citatsamling med Angular 20 och ett .NET 9 API. Användare kan skapa k
 dotnet run --project .\ConsoleApp1\ConsoleApp1.csproj --launch-profile http
 ```
 
-API:t startar på `http://localhost:5000` och skapar SQLite-databasen `quotes.db` automatiskt. Utvecklingsprofilen innehåller en lokal JWT-nyckel; sätt `Jwt__Key` till en hemlig nyckel på minst 32 byte i andra miljöer. Konfigurera tillåtna webbklienter med `Cors__AllowedOrigins__0`.
+API:t startar på `http://localhost:4200` och skapar SQLite-databasen `quotes.db`
 
 ## Starta Angular
 

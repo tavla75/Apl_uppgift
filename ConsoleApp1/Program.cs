@@ -124,18 +124,23 @@ async Task<IResult> Login(
     IPasswordHasher<User> passwordHasher,
     CancellationToken cancellationToken)
 {
-    var email = request.Email?.Trim().ToLowerInvariant();
-    var user = email is null
-        ? null
-        : await database.Users.SingleOrDefaultAsync(
-            candidate => candidate.Email == email,
-            cancellationToken);
-
-    if (user is null || string.IsNullOrEmpty(request.Password))
+    if (string.IsNullOrWhiteSpace(request.Identifier) || request.Identifier.Trim().Length > 254)
     {
         return Results.Unauthorized();
     }
 
+    var identifier = request.Identifier.Trim().ToLowerInvariant();
+    var matchingUsers = await database.Users
+        .Where(candidate => candidate.Email == identifier || candidate.UserName.ToLower() == identifier)
+        .Take(2)
+        .ToListAsync(cancellationToken);
+
+    if (matchingUsers.Count != 1 || string.IsNullOrEmpty(request.Password))
+    {
+        return Results.Unauthorized();
+    }
+
+    var user = matchingUsers[0];
     var verification = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
     if (verification == PasswordVerificationResult.Failed)
     {
@@ -348,7 +353,7 @@ public sealed class Quote
 }
 
 public sealed record RegisterRequest(string Email, string UserName, string Password);
-public sealed record LoginRequest(string Email, string Password);
+public sealed record LoginRequest(string Identifier, string Password);
 public sealed record QuoteRequest(string Text, string? Author);
 public sealed record QuoteResponse(int Id, string Text, string? Author, DateTime CreatedAtUtc);
 public sealed record AuthResponse(string AccessToken, string Email, string UserName, DateTime ExpiresAt);
