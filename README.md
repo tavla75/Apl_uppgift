@@ -1,6 +1,6 @@
 # Citatboken
 
-Responsiv citatsamling med Angular 20 och ett .NET 9 API. Användare kan skapa konto, logga in och hantera sina egna citat.
+Responsiv citatsamling med Angular 20 och ett .NET 9 API. Användare kan skapa konto, logga in och hantera sina egna citat och böcker.
 
 ## Krav
 
