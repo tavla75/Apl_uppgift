@@ -1,18 +1,24 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { Quote, QuoteRequest } from '../../core/quote.models';
 import { QuoteService } from '../../core/quote.service';
 
 @Component({
   selector: 'app-quotes-page',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule],
   templateUrl: './quotes-page.html',
   styleUrl: './quotes-page.css',
 })
 export class QuotesPage implements OnInit {
   private readonly quoteService = inject(QuoteService);
+  protected readonly sciFiFavorites = [
+    'Rymden är inte tyst; den väntar bara på rätt fråga.',
+    'Varje ny värld börjar som en punkt på en karta.',
+    'Framtiden är ett frö vi skickar genom mörkret.',
+    'Teknik kan visa vägen, men modet måste ta steget.',
+    'Bland stjärnorna är hemmet fortfarande det vi bygger tillsammans.',
+  ];
   protected quotes: Quote[] = [];
   protected text = '';
   protected author = '';

@@ -1,0 +1,74 @@
+.back-link {
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.add-book-page {
+  margin: 0 auto;
+  max-width: 640px;
+  padding-block: 2rem;
+}
+
+.back-link {
+  color: #315b47;
+}
+
+.add-book-page h1 {
+  margin: 1.25rem 0 0.4rem;
+}
+
+.intro {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.book-form {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1.5rem;
+  border: 1px solid #e3e3e3;
+  border-radius: 0.75rem;
+  background: white;
+}
+
+.book-form label {
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.book-form input {
+  min-width: 0;
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 0.4rem;
+  font: inherit;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.cancel-button {
+  color: #315b47;
+}
+
+.form-actions button {
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 0.4rem;
+  background: #315b47;
+  color: white;
+  cursor: pointer;
+}
+
+.form-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

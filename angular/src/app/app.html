@@ -5,6 +5,29 @@
       <span>Citatboken</span>
     </a>
     @if (auth.currentSession(); as session) {
+      <div class="section-menu">
+        <button
+          class="section-menu-toggle"
+          type="button"
+          aria-controls="section-menu-items"
+          [attr.aria-expanded]="menuOpen"
+          (click)="menuOpen = !menuOpen"
+        >
+          <i class="fa-solid fa-bars" aria-hidden="true"></i>
+          Meny
+          <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+        </button>
+        @if (menuOpen) {
+          <nav class="section-menu-items" id="section-menu-items" aria-label="Huvudmeny">
+            <a routerLink="/home-page" (click)="closeMenu()">
+              <i class="fa-solid fa-book-open" aria-hidden="true"></i>Böcker
+            </a>
+            <a routerLink="/quotes" (click)="closeMenu()">
+              <i class="fa-solid fa-quote-left" aria-hidden="true"></i>Mina citat
+            </a>
+          </nav>
+        }
+      </div>
       <div class="header-actions">
         <span class="welcome d-none d-sm-inline">Hej, {{ session.userName }}</span>
         <button class="btn btn-outline-dark btn-sm" type="button" (click)="logout()">

@@ -1,0 +1,53 @@
+<main class="add-book-page">
+  <a class="back-link" routerLink="/home-page">← Tillbaka till böcker</a>
+  <h1>
+    {{ bookNotFound ? 'Boken hittades inte' : isEditing ? 'Redigera bok' : 'Lägg till ny bok' }}
+  </h1>
+  @if (bookNotFound) {
+    <p class="intro">Boken finns inte längre i samlingen.</p>
+  } @else {
+    <p class="intro">
+      {{ isEditing ? 'Uppdatera informationen om boken.' : 'Fyll i informationen om boken.' }}
+    </p>
+
+    <form class="book-form" (ngSubmit)="save()" #bookForm="ngForm">
+      <label for="bookTitle">Titel</label>
+      <input
+        id="bookTitle"
+        name="title"
+        type="text"
+        [(ngModel)]="title"
+        required
+        maxlength="200"
+        autocomplete="off"
+      />
+
+      <label for="bookAuthor">Författare</label>
+      <input
+        id="bookAuthor"
+        name="author"
+        type="text"
+        [(ngModel)]="author"
+        required
+        maxlength="120"
+        autocomplete="off"
+      />
+
+      <label for="publicationDate">Publiceringsdatum</label>
+      <input
+        id="publicationDate"
+        name="publicationDate"
+        type="date"
+        [(ngModel)]="publicationDate"
+        required
+      />
+
+      <div class="form-actions">
+        <a class="cancel-button" routerLink="/home-page">Avbryt</a>
+        <button type="submit" [disabled]="bookForm.invalid || !title.trim() || !author.trim()">
+          {{ isEditing ? 'Spara ändringar' : 'Spara bok' }}
+        </button>
+      </div>
+    </form>
+  }
+</main>

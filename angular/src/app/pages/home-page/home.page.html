@@ -1,51 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-    <nav class="home-navbar" aria-label="Huvudmeny">
-      <a routerLink="/home-page">Böcker</a>
-      <a routerLink="/quotes">Citatpage</a>
-    </nav>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
     <section class="home-page">
-        <h1>All books</h1>
-    <p class="intro">Bläddra bland böcker</p>
+      <h1>All books</h1>
+      <p class="intro">Bläddra bland böcker</p>
 
-    <form class="book-form" (ngSubmit)="addBook()">
-      <h2>Lägg till en bok</h2>
-      <div class="book-form-fields">
-        <label>
-          Titel
-          <input name="title" type="text" [(ngModel)]="title" required maxlength="200">
-        </label>
-        <label>
-          Författare
-          <input name="author" type="text" [(ngModel)]="author" required maxlength="120">
-        </label>
-        <label>
-          Utgivningsår
-          <input name="year" type="number" [(ngModel)]="year" required step="1">
-        </label>
-        <button type="submit" [disabled]="!title.trim() || !author.trim() || year === null">
-          Lägg till bok
-        </button>
-      </div>
-    </form>
+      <a class="add-book-button" routerLink="/books/new">Lägg till ny bok</a>
 
-    @if (books.length === 0){
-      <p>Det finns inga böcker att visa.</p>
-    } @else {
-      <ul class="book-list">
-        @for (book of books; track book.id){
-          <li class="book-card">
-            <h2>{{book.title}}</h2>
-            <p>{{ book.author}}  <span>({{ book.year }})</span></p>
-          </li>
-        }
-      </ul>
-    }
+      @if (books.length === 0) {
+        <p>Det finns inga böcker att visa.</p>
+      } @else {
+        <ul class="book-list">
+          @for (book of books; track book.id) {
+            <li class="book-card">
+              <h2>{{ book.title }}</h2>
+              <p>
+                {{ book.author }}
+                <span
+                  >({{
+                    book.publicationDate.length === 4
+                      ? book.publicationDate
+                      : (book.publicationDate | date: 'longDate')
+                  }})</span
+                >
+              </p>
+              <div class="book-actions">
+                <a
+                  [routerLink]="['/books', book.id, 'edit']"
+                  [attr.aria-label]="'Redigera ' + book.title"
+                >
+                  <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                  Redigera
+                </a>
+                <button
+                  type="button"
+                  class="delete-book-button"
+                  (click)="deleteBook(book.id)"
+                  [attr.aria-label]="'Ta bort ' + book.title"
+                >
+                  <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+                  Ta bort
+                </button>
+              </div>
+            </li>
+          }
+        </ul>
+      }
     </section>
-</body>
+  </body>
 </html>
