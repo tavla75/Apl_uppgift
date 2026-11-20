@@ -1,0 +1,63 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.site-header {
+  background: rgb(255 255 255 / 90%);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+}
+
+.navbar {
+  min-height: 76px;
+  padding-inline: 1.25rem;
+}
+
+.brand {
+  align-items: center;
+  color: var(--ink);
+  display: inline-flex;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  gap: 0.7rem;
+  text-decoration: none;
+}
+
+.brand-mark {
+  align-items: center;
+  background: var(--accent-soft);
+  border-radius: 12px;
+  color: var(--accent);
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.header-actions {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.welcome {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.app-main {
+  max-width: 1160px;
+  padding: 3.25rem 1.25rem 5rem;
+}
+
+@media (max-width: 576px) {
+  .app-main {
+    padding-top: 2rem;
+  }
+}

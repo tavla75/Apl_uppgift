@@ -1,0 +1,64 @@
+:root {
+  color-scheme: light;
+  --page: #f6f4ef;
+  --surface: #fff;
+  --ink: #24231f;
+  --muted: #77746c;
+  --line: #e8e5de;
+  --accent: #bd5e41;
+  --accent-dark: #9c492f;
+  --accent-soft: #f7e9e3;
+  --green: #567664;
+  font-family: 'DM Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  margin: 0;
+  min-width: 320px;
+}
+
+h1,
+h2,
+h3,
+.serif {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--accent);
+  --bs-btn-border-color: var(--accent);
+  --bs-btn-hover-bg: var(--accent-dark);
+  --bs-btn-hover-border-color: var(--accent-dark);
+  --bs-btn-active-bg: var(--accent-dark);
+  --bs-btn-active-border-color: var(--accent-dark);
+  --bs-btn-disabled-bg: var(--accent);
+  --bs-btn-disabled-border-color: var(--accent);
+}
+
+.form-control {
+  border-color: var(--line);
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+}
+
+.form-control:focus {
+  border-color: #d78a72;
+  box-shadow: 0 0 0 0.2rem rgb(189 94 65 / 14%);
+}
+
+.form-label {
+  color: #49463f;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.alert {
+  border-radius: 10px;
+}

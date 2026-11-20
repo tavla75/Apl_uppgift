@@ -1,0 +1,20 @@
+<header class="site-header">
+  <nav class="navbar navbar-expand-lg container">
+    <a class="brand" routerLink="/home-page">
+      <span class="brand-mark"><i class="fa-solid fa-quote-left" aria-hidden="true"></i></span>
+      <span>Citatboken</span>
+    </a>
+    @if (auth.currentSession(); as session) {
+      <div class="header-actions">
+        <span class="welcome d-none d-sm-inline">Hej, {{ session.userName }}</span>
+        <button class="btn btn-outline-dark btn-sm" type="button" (click)="logout()">
+          <i class="fa-solid fa-arrow-right-from-bracket me-2" aria-hidden="true"></i>Logga ut
+        </button>
+      </div>
+    }
+  </nav>
+</header>
+
+<main class="container app-main">
+  <router-outlet />
+</main>
