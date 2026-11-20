@@ -1,6 +1,12 @@
 # .NET build output
 **/bin/
 **/obj/
+**/.vs/
+**/TestResults/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
 # SQLite databases and journal files
 *.db
@@ -28,6 +34,7 @@ coverage/
 .idea/**/httpRequests/
 .idea/**/dataSources/
 .idea/**/dataSources.local.xml
+.idea/**/dataSources.xml
 
 # Logs and operating-system files
 *.log
