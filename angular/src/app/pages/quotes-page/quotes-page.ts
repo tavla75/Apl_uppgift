@@ -12,13 +12,6 @@ import { QuoteService } from '../../core/quote.service';
 })
 export class QuotesPage implements OnInit {
   private readonly quoteService = inject(QuoteService);
-  protected readonly sciFiFavorites = [
-    'Rymden är inte tyst; den väntar bara på rätt fråga.',
-    'Varje ny värld börjar som en punkt på en karta.',
-    'Framtiden är ett frö vi skickar genom mörkret.',
-    'Teknik kan visa vägen, men modet måste ta steget.',
-    'Bland stjärnorna är hemmet fortfarande det vi bygger tillsammans.',
-  ];
   protected quotes: Quote[] = [];
   protected text = '';
   protected author = '';
