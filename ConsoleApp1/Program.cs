@@ -54,7 +54,7 @@ var app = builder.Build();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var database = scope.ServiceProvider.GetRequiredService<QuotesDbContext>();
-    await database.Database.EnsureCreatedAsync();
+    await database.Database.MigrateAsync();
 }
 
 app.UseCors("Angular");
@@ -72,6 +72,13 @@ quotes.MapGet("/", ListQuotes);
 quotes.MapPost("/", CreateQuote);
 quotes.MapPut("/{id:int}", UpdateQuote);
 quotes.MapDelete("/{id:int}", DeleteQuote);
+
+var books = app.MapGroup("/api/books").RequireAuthorization();
+books.MapGet("/", ListBooks);
+books.MapGet("/{id:int}", GetBook);
+books.MapPost("/", CreateBook);
+books.MapPut("/{id:int}", UpdateBook);
+books.MapDelete("/{id:int}", DeleteBook);
 
 app.Run();
 
@@ -267,6 +274,157 @@ static async Task<IResult> DeleteQuote(
     return Results.NoContent();
 }
 
+static async Task<IResult> ListBooks(
+    ClaimsPrincipal principal,
+    QuotesDbContext database,
+    CancellationToken cancellationToken)
+{
+    if (!TryGetUserId(principal, out var userId))
+    {
+        return Results.Unauthorized();
+    }
+
+    var result = await database.Books
+        .AsNoTracking()
+        .Where(book => book.UserId == userId)
+        .OrderBy(book => book.Title)
+        .Select(book => new BookResponse(
+            book.Id,
+            book.Title,
+            book.Author,
+            book.PublicationDate))
+        .ToListAsync(cancellationToken);
+
+    return Results.Ok(result);
+}
+
+static async Task<IResult> GetBook(
+    int id,
+    ClaimsPrincipal principal,
+    QuotesDbContext database,
+    CancellationToken cancellationToken)
+{
+    if (!TryGetUserId(principal, out var userId))
+    {
+        return Results.Unauthorized();
+    }
+
+    var book = await database.Books
+        .AsNoTracking()
+        .Where(book => book.Id == id && book.UserId == userId)
+        .Select(book => new BookResponse(
+            book.Id,
+            book.Title,
+            book.Author,
+            book.PublicationDate))
+        .FirstOrDefaultAsync(cancellationToken);
+
+    return book is null ? Results.NotFound() : Results.Ok(book);
+}
+
+static async Task<IResult> CreateBook(
+    BookRequest request,
+    ClaimsPrincipal principal,
+    QuotesDbContext database,
+    CancellationToken cancellationToken)
+{
+    if (!TryGetUserId(principal, out var userId))
+    {
+        return Results.Unauthorized();
+    }
+
+    if (string.IsNullOrWhiteSpace(request.Title) ||
+        string.IsNullOrWhiteSpace(request.Author) ||
+        string.IsNullOrWhiteSpace(request.PublicationDate))
+    {
+        return Results.ValidationProblem(new Dictionary<string, string[]>
+        {
+            ["book"] = ["Titel, författare och publiceringsdatum måste anges."]
+        });
+    }
+
+    var book = new Book
+    {
+        Title = request.Title.Trim(),
+        Author = request.Author.Trim(),
+        PublicationDate = request.PublicationDate.Trim(),
+        UserId = userId
+    };
+
+    database.Books.Add(book);
+    await database.SaveChangesAsync(cancellationToken);
+
+    var response = new BookResponse(
+        book.Id,
+        book.Title,
+        book.Author,
+        book.PublicationDate);
+
+    return Results.Created($"/api/books/{book.Id}", response);
+}
+
+static async Task<IResult> UpdateBook(
+    int id,
+    BookRequest request,
+    ClaimsPrincipal principal,
+    QuotesDbContext database,
+    CancellationToken cancellationToken)
+{
+    if (!TryGetUserId(principal, out var userId))
+    {
+        return Results.Unauthorized();
+    }
+
+    var book = await database.Books
+        .FirstOrDefaultAsync(
+            book => book.Id == id && book.UserId == userId,
+            cancellationToken);
+
+    if (book is null)
+    {
+        return Results.NotFound();
+    }
+
+    book.Title = request.Title.Trim();
+    book.Author = request.Author.Trim();
+    book.PublicationDate = request.PublicationDate.Trim();
+
+    await database.SaveChangesAsync(cancellationToken);
+
+    return Results.Ok(new BookResponse(
+        book.Id,
+        book.Title,
+        book.Author,
+        book.PublicationDate));
+}
+
+static async Task<IResult> DeleteBook(
+    int id,
+    ClaimsPrincipal principal,
+    QuotesDbContext database,
+    CancellationToken cancellationToken)
+{
+    if (!TryGetUserId(principal, out var userId))
+    {
+        return Results.Unauthorized();
+    }
+
+    var book = await database.Books
+        .FirstOrDefaultAsync(
+            book => book.Id == id && book.UserId == userId,
+            cancellationToken);
+
+    if (book is null)
+    {
+        return Results.NotFound();
+    }
+
+    database.Books.Remove(book);
+    await database.SaveChangesAsync(cancellationToken);
+
+    return Results.NoContent();
+}
+
 static IResult? ValidateQuote(QuoteRequest request)
 {
     var errors = new Dictionary<string, string[]>();
@@ -320,6 +478,7 @@ public sealed class QuotesDbContext(DbContextOptions<QuotesDbContext> options) :
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Quote> Quotes => Set<Quote>();
+    public DbSet<Book> Books => Set<Book>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -331,6 +490,12 @@ public sealed class QuotesDbContext(DbContextOptions<QuotesDbContext> options) :
             .WithOne()
             .HasForeignKey(quote => quote.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<User>()
+            .HasMany(user => user.Books)
+            .WithOne()
+            .HasForeignKey(book => book.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
 
@@ -341,6 +506,8 @@ public sealed class User
     public required string UserName { get; set; }
     public string PasswordHash { get; set; } = string.Empty;
     public List<Quote> Quotes { get; set; } = [];
+    
+    public List<Book> Books { get; set; } = [];
 }
 
 public sealed class Quote
@@ -351,6 +518,26 @@ public sealed class Quote
     public int UserId { get; set; }
     public DateTime CreatedAtUtc { get; set; }
 }
+
+public sealed class Book
+{
+    public int Id { get; set; }
+    public required string Title { get; set; }
+    public required string Author { get; set; }
+    public required string PublicationDate { get; set; }
+    public int UserId { get; set; }
+}
+
+public sealed record BookResponse(
+    int Id,
+    string Title,
+    string Author,
+    string PublicationDate);
+
+public sealed record BookRequest(
+    string Title,
+    string Author,
+    string PublicationDate);
 
 public sealed record RegisterRequest(string Email, string UserName, string Password);
 public sealed record LoginRequest(string Identifier, string Password);

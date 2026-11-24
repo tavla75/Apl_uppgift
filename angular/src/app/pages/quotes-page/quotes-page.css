@@ -50,28 +50,6 @@
   color: var(--muted);
 }
 
-.sci-fi-favorites {
-  margin-bottom: 2rem;
-}
-
-.favorites-note {
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.sci-fi-favorites ol {
-  display: grid;
-  gap: 0.75rem;
-  padding-left: 1.5rem;
-}
-
-.sci-fi-favorites li {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 1rem;
-}
-
 .quotes-layout {
   align-items: start;
   display: grid;

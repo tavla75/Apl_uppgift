@@ -8,37 +8,11 @@
       <p>Ord värda att komma ihåg, samlade på ett ställe.</p>
     </div>
     <div class="quote-count">
-      <i class="fa-solid fa-quote-left" aria-hidden="true"></i><span>{{ quotes.length }}</span
+      <i class="fa-solid fa-quote-left" aria-hidden="true"></i
+      ><span>{{ quotes.length + sciFiFavorites.length }}</span
       ><small>citat</small>
     </div>
   </div>
-
-  <section class="sci-fi-favorites">
-    <h2> Mina 5 favorit citat </h2>
-    <p class="favorites-note">
-      Egna sammanfattningar av teman från filmerna – inte ordagranna filmcitat.
-    </p>
-    <ol>
-      <li>
-        <strong>Star Wars</strong> — Må Kraften vara med dig.
-      </li>
-      <li>
-        <strong>The Matrix</strong> — Frihet börjar med modet att ifrågasätta den verklighet vi tar
-        för given.
-      </li>
-      <li>
-        <strong>Arrival</strong> — Tålamod och kommunikation kan förvandla mötet med det okända.
-      </li>
-      <li>
-        <strong>Blade Runner 2049</strong> — Vår betydelse avgörs inte av vårt ursprung, utan av
-        våra val.
-      </li>
-      <li>
-        <strong>2001: A Space Odyssey</strong> — Utforskandet av rymden får oss också att fundera
-        över människans plats i universum.
-      </li>
-    </ol>
-  </section>
 
   @if (error) {
     <div class="alert alert-danger" role="alert">{{ error }}</div>
@@ -50,16 +24,22 @@
         <span class="editor-icon"
           ><i
             class="fa-solid"
-            [class.fa-pen-to-square]="editingId !== null"
-            [class.fa-plus]="editingId === null"
+            [class.fa-pen-to-square]="editingId !== null || editingFavoriteId !== null"
+            [class.fa-plus]="editingId === null && editingFavoriteId === null"
             aria-hidden="true"
           ></i
         ></span>
         <div>
-          <h2>{{ editingId === null ? 'Spara ett citat' : 'Redigera citat' }}</h2>
+          <h2>
+            {{
+              editingId !== null || editingFavoriteId !== null
+                ? 'Redigera citat'
+                : 'Spara ett citat'
+            }}
+          </h2>
           <p>
             {{
-              editingId === null
+              editingId === null && editingFavoriteId === null
                 ? 'Har du hittat något du vill minnas?'
                 : 'Uppdatera texten eller upphovspersonen.'
             }}
@@ -95,7 +75,7 @@
           />
         </div>
         <div class="editor-actions">
-          @if (editingId !== null) {
+          @if (editingId !== null || editingFavoriteId !== null) {
             <button class="btn btn-light" type="button" (click)="cancelEdit()">Avbryt</button>
           }
           <button
@@ -105,35 +85,62 @@
           >
             <i
               class="fa-solid"
-              [class.fa-floppy-disk]="editingId !== null"
-              [class.fa-plus]="editingId === null"
+              [class.fa-floppy-disk]="editingId !== null || editingFavoriteId !== null"
+              [class.fa-plus]="editingId === null && editingFavoriteId === null"
               aria-hidden="true"
             ></i>
-            {{ editingId === null ? 'Lägg till citat' : 'Spara ändringar' }}
+            {{
+              editingId !== null || editingFavoriteId !== null
+                ? 'Spara ändringar'
+                : 'Lägg till citat'
+            }}
           </button>
         </div>
       </form>
     </section>
 
-    <section class="collection" aria-label="Sparade citat">
+    <section class="collection" aria-label="Citat och favoriter">
       <div class="collection-heading">
         <h2>Din samling</h2>
-        <span>{{ quotes.length }} {{ quotes.length === 1 ? 'sparat' : 'sparade' }}</span>
+        <span>{{ quotes.length + sciFiFavorites.length }} citat</span>
       </div>
 
-      @if (loading) {
-        <div class="loading-state">
-          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span
-          ><span>Hämtar dina citat…</span>
-        </div>
-      } @else if (quotes.length === 0) {
-        <div class="empty-state">
-          <span class="empty-icon"><i class="fa-regular fa-bookmark" aria-hidden="true"></i></span>
-          <h3>Här börjar din samling</h3>
-          <p>Lägg till ett citat du tycker om med formuläret.</p>
-        </div>
-      } @else {
-        <div class="quote-list">
+      <div class="quote-list">
+        @for (favorite of sciFiFavorites; track favorite.id) {
+          <article class="quote-card">
+            <i class="fa-solid fa-quote-left quote-mark" aria-hidden="true"></i>
+            <blockquote>{{ favorite.text }}</blockquote>
+            <div class="quote-footer">
+              <span class="quote-author">{{ favorite.film }} · sci-fi-favorit</span>
+              <div class="quote-actions">
+                <button
+                  class="icon-button"
+                  type="button"
+                  (click)="editFavorite(favorite)"
+                  [attr.aria-label]="'Redigera favorit: ' + favorite.film"
+                  title="Redigera"
+                >
+                  <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                </button>
+                <button
+                  class="icon-button delete-button"
+                  type="button"
+                  (click)="deleteFavorite(favorite)"
+                  [attr.aria-label]="'Ta bort favorit: ' + favorite.film"
+                  title="Ta bort"
+                >
+                  <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+        }
+        @if (loading) {
+          <div class="loading-state">
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span
+            ><span>Hämtar dina citat…</span>
+          </div>
+        } @else {
           @for (quote of quotes; track quote.id) {
             <article class="quote-card">
               <i class="fa-solid fa-quote-left quote-mark" aria-hidden="true"></i>
@@ -163,8 +170,8 @@
               </div>
             </article>
           }
-        </div>
-      }
+        }
+      </div>
     </section>
   </div>
 </section>

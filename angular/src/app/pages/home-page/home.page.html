@@ -10,7 +10,9 @@
       <p class="intro">Bläddra bland böcker</p>
 
       <a class="add-book-button" routerLink="/books/new">Lägg till ny bok</a>
-
+      @if (error){
+        <p role="alert">{{ error }}</p>
+      }
       @if (books.length === 0) {
         <p>Det finns inga böcker att visa.</p>
       } @else {
