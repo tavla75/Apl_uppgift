@@ -179,7 +179,7 @@
 
 .quote-footer {
   align-items: center;
-  border-top: 1px solid #f0eee9;
+  border-top: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
   min-height: 42px;
@@ -202,7 +202,7 @@
   background: transparent;
   border: 0;
   border-radius: 8px;
-  color: #77746c;
+  color: var(--muted);
   display: inline-flex;
   height: 34px;
   justify-content: center;
@@ -222,8 +222,8 @@
 .empty-state,
 .loading-state {
   align-items: center;
-  background: rgb(255 255 255 / 55%);
-  border: 1px dashed #dcd7cd;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  border: 1px dashed var(--line);
   border-radius: 14px;
   color: var(--muted);
   display: flex;

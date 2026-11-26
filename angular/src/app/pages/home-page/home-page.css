@@ -3,7 +3,7 @@
 }
 
 .intro {
-  color: #666;
+  color: var(--muted);
 }
 
 .add-book-button {
@@ -11,13 +11,13 @@
   margin: 1rem 0 2rem;
   padding: 1.25rem;
   border-radius: 0.4rem;
-  background: #315b47;
-  color: white;
+  background: var(--green);
+  color: var(--page);
   text-decoration: none;
 }
 
 .add-book-button:hover {
-  background: #264936;
+  background: var(--accent-dark);
 }
 
 .add-book-button:focus-visible {
@@ -35,9 +35,9 @@
 
 .book-card {
   padding: 1.25rem;
-  border: 1px solid #e3e3e3;
+  border: 1px solid var(--line);
   border-radius: 0.75rem;
-  background: white;
+  background: var(--surface);
 }
 
 .book-card h2 {
@@ -61,10 +61,10 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.45rem 0.65rem;
-  border: 1px solid #e3e3e3;
+  border: 1px solid var(--line);
   border-radius: 0.4rem;
   background: transparent;
-  color: #315b47;
+  color: var(--green);
   font: inherit;
   font-size: 0.9rem;
   text-decoration: none;
@@ -72,7 +72,7 @@
 }
 
 .book-actions a:hover {
-  background: #f1f5f2;
+  background: var(--accent-soft);
 }
 
 .delete-book-button {
@@ -80,5 +80,5 @@
 }
 
 .delete-book-button:hover {
-  background: #fff1ef;
+  background: var(--accent-soft);
 }

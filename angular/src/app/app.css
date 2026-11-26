@@ -4,7 +4,7 @@
 }
 
 .site-header {
-  background: rgb(255 255 255 / 90%);
+  background: var(--surface);
   border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
@@ -95,6 +95,33 @@
   display: flex;
   gap: 1rem;
   margin-left: auto;
+}
+
+.theme-toggle {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  display: inline-flex;
+  gap: 0.55rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  background: var(--accent-soft);
+}
+
+.logout-button{
+  border-color: var(--line);
+  color: var(--ink)
+}
+.logout-button:hover,
+.logout-button:focus-visible {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--ink);
 }
 
 .welcome {

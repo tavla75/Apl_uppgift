@@ -41,7 +41,7 @@
 
 .story-note {
   border-left: 2px solid #dcb4a5;
-  color: #77746c;
+  color: var(--muted);
   display: grid;
   gap: 0.5rem;
   margin-top: 2.5rem;

@@ -30,11 +30,25 @@
       </div>
       <div class="header-actions">
         <span class="welcome d-none d-sm-inline">Hej, {{ session.userName }}</span>
-        <button class="btn btn-outline-dark btn-sm" type="button" (click)="logout()">
+        <button class="btn logout-button btn-sm" type="button" (click)="logout()">
           <i class="fa-solid fa-arrow-right-from-bracket me-2" aria-hidden="true"></i>Logga ut
         </button>
       </div>
     }
+    <button
+      class="theme-toggle"
+      type="button"
+      [attr.aria-label]="theme.isDarkMode() ? 'Byt till ljust läge' : 'Byt till mörkt läge'"
+      (click)="theme.toggleTheme()"
+    >
+      <i
+        class="fa-solid"
+        [class.fa-sun]="theme.isDarkMode()"
+        [class.fa-moon]="!theme.isDarkMode()"
+        aria-hidden="true"
+      ></i>
+      {{ theme.isDarkMode() ? 'Ljust läge' : 'Mörkt läge' }}
+    </button>
   </nav>
 </header>
 

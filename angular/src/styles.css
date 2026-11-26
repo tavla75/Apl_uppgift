@@ -12,6 +12,19 @@
   font-family: 'DM Sans', sans-serif;
 }
 
+:root[data-bs-theme='dark'] {
+  color-scheme: dark;
+  --page: #171815;
+  --surface: #242520;
+  --ink: #f0eee8;
+  --muted: #aaa69b;
+  --line: #3a3932;
+  --accent: #df896d;
+  --accent-dark: #f0a58c;
+  --accent-soft: #3a2b26;
+  --green: #9fbea9;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -54,7 +67,7 @@ h3,
 }
 
 .form-label {
-  color: #49463f;
+  color: var(--ink);
   font-size: 0.9rem;
   font-weight: 600;
 }
